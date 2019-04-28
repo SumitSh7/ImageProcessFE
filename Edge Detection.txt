@@ -1,0 +1,62 @@
+private void edgeDetectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Bitmap bmp2 = new Bitmap(pictureBox1.Image);
+            int width = bmp2.Width;
+            int height = bmp2.Height;
+            int[,] convoluted = new int[height - 2, width - 2];//convoluted matrix
+            int[,] matrixlx = new int[,]
+            {
+               {1,1,1},
+               {1,-8,1},
+               {1,1,1}
+            };//edgedetectmatrix
+            int[,] image = new int[height, width];
+            Color p;
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    p = bmp2.GetPixel(x, y);
+                    int a = p.A;
+                    int b = p.B;
+                    int r = p.R;
+                    int g = p.G;
+                    int avg = (r + g + b) / 3;
+                    //bmp2.SetPixel(x, y, Color.FromArgb(a, avg, avg, avg));
+                    image[y,x] = avg;
+                }
+            }
+            for (int y = 0; y < height - 2; y++)
+            {
+                for (int x = 0; x < width - 2; x++)
+                {
+                    convoluted[y, x] = (matrixlx[0, 0] * image[y, x] + matrixlx[0, 1] * image[y, x + 1] + matrixlx[0, 2] * image[y, x + 2]) +
+                                      (matrixlx[1, 0] * image[y + 1, x] + matrixlx[1, 1] * image[y + 1, x + 1] + matrixlx[1, 2] * image[y + 1, x + 2]) +
+                                      (matrixlx[2, 0] * image[y + 2, x] + matrixlx[2, 1] * image[y + 2, x + 1] + matrixlx[2, 2] * image[y + 2, x + 2]);
+                }
+            }
+            for (int y = 0; y < height - 2; y++)
+            {
+                for (int x = 0; x < width - 2; x++)
+                {
+                    int avg;
+                    if (convoluted[y, x] < 0)
+                    {
+                        avg = 0;
+                        bmp2.SetPixel(x, y, Color.FromArgb(avg, avg, avg));
+                    }
+                    else if (convoluted[y, x] > 255)
+                    {
+                        avg = 255;
+                        bmp2.SetPixel(x, y, Color.FromArgb(avg, avg, avg));
+                    }
+                    else
+                    {
+                        avg = convoluted[y, x];
+                        bmp2.SetPixel(x, y, Color.FromArgb(avg, avg, avg));
+                    }
+                   }
+                 }
+                 //load greyscaleimge in picturebox2
+                pictureBox2.Image = bmp2;
+        }

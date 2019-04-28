@@ -1,0 +1,78 @@
+private void sharpenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Bitmap bmp = new Bitmap(pictureBox1.Image);
+            Bitmap bmp2 = new Bitmap(pictureBox1.Image);
+            int width = bmp.Width;
+            int height = bmp.Height;
+
+            int[,] convolutedRed = new int[height - 4, width - 4];//convoluted matrix
+            int[,] convolutedBlue = new int[height - 4, width - 4];//convoluted matrix
+            int[,] convolutedGreen = new int[height - 4, width - 4];//convoluted matrix
+
+            int[,] alpha = new int[height, width];
+            int[,] red = new int[height, width];
+            int[,] green = new int[height, width];
+            int[,] blue = new int[height, width];
+
+            int[,] sharpmatrix= new int[,]
+            {
+                {0,0,0,0,0},
+                {0,0,-1,0,0},
+                {0,-1,5,-1,0},
+                {0,0,-1,0,0},
+                {0,0,0,0,0}
+            };//sharpenmatrix5x5
+            
+            Color p;
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    p = bmp.GetPixel(x, y);
+                    alpha[y, x] = p.A;
+                    red[y, x] = p.R;
+                    green[y, x] = p.G;
+                    blue[y, x] = p.B;
+                }
+            }
+
+            for (int x = 0; x < width - 4; x++)
+            {
+                for (int y = 0; y < height - 4; y++)
+                {
+                    for (int u = 0; u < 5; u++)
+                    {
+                        for (int v = 0; v < 5; v++)
+                        {
+                            convolutedRed[y, x] += sharpmatrix[u, v] * red[y + u, x + v];
+                            convolutedGreen[y, x] += sharpmatrix[u, v] * green[y + u, x + v];
+                            convolutedBlue[y, x] += sharpmatrix[u, v] * blue[y + u, x + v];
+                        }
+                    }     
+                }
+            }
+            for (int x = 0; x < width - 4; x++)
+            {
+                for (int y = 0; y < height - 4; y++)
+                {
+                    p = bmp2.GetPixel(x + 1, y + 1);
+                    int r = convolutedRed[y, x];
+                    if (r > 255)
+                        r = 255;
+                    if (r < 0)
+                        r = 0;
+                    int g = convolutedGreen[y, x];
+                    if (g > 255)
+                        g = 255;
+                    if (g < 0)
+                        g = 0;
+                    int b = convolutedBlue[y, x];
+                    if (b > 255)
+                        b = 255;
+                    if (b < 0)
+                        b = 0;
+                    bmp2.SetPixel(x + 1, y + 1, Color.FromArgb(r, g, b));
+                }
+            }
+            pictureBox2.Image = bmp2;
+        }

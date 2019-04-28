@@ -1,0 +1,7 @@
+  private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pictureBox1.Image = null;
+            pictureBox2.Image = null;
+            chart1.Series.Clear();
+            chart2.Series.Clear();
+        }

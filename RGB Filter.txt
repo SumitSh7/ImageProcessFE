@@ -1,0 +1,59 @@
+private void redifyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Bitmap bmp1 = new Bitmap(pictureBox1.Image);
+            Bitmap bmp2 = new Bitmap(pictureBox1.Image);
+            int width = bmp1.Width;
+            int height = bmp1.Height;
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    //extract pixel component ARGB
+                    Color p = bmp1.GetPixel(x, y);
+                    int a = p.A;
+                    int r = p.R;
+                    bmp2.SetPixel(x, y, Color.FromArgb(a, r, 0, 0));
+                    pictureBox2.Image = bmp2;
+                }
+            }
+        }
+
+        private void greenifyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Bitmap bmp1 = new Bitmap(pictureBox1.Image);
+            Bitmap bmp2 = new Bitmap(pictureBox1.Image);
+            int width = bmp1.Width;
+            int height = bmp1.Height;
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    //extract pixel component ARGB
+                    Color p = bmp1.GetPixel(x, y);
+                    int a = p.A;
+                    int g = p.G;
+                    bmp2.SetPixel(x, y, Color.FromArgb(a, 0, g, 0));
+                    pictureBox2.Image = bmp2;
+                }
+            }
+        }
+
+        private void blueifyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Bitmap bmp1 = new Bitmap(pictureBox1.Image);
+            Bitmap bmp2 = new Bitmap(pictureBox1.Image);
+            int width = bmp1.Width;
+            int height = bmp1.Height;
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    //extract pixel component ARGB
+                    Color p = bmp1.GetPixel(x, y);
+                    int a = p.A;
+                    int b = p.B;
+                    bmp2.SetPixel(x, y, Color.FromArgb(a, 0, 0, b));
+                    pictureBox2.Image = bmp2;
+                }
+            }
+        }
